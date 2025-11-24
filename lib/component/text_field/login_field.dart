@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:hello_world/enumerator/type.dart';
+
+class LoginField extends StatefulWidget {
+
+  final LoginType type;
+  final String label;
+  final IconData icon;
+  final TextEditingController controller;
+
+  const LoginField({
+    super.key, 
+    required this.type,
+    required this.label,
+    required this.icon,
+    required this.controller
+  });
+
+  @override
+  State<LoginField> createState() => _LoginFieldState();
+}
+
+class _LoginFieldState extends State<LoginField> {
+
+  bool showPassword = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: widget.controller,
+      autocorrect: false,
+      textCapitalization: TextCapitalization.none,
+      decoration: InputDecoration(
+        fillColor: Colors.grey[200],
+        filled: true,
+        labelText: widget.label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20)
+        ),
+        prefixIcon: Icon(widget.icon),
+        suffixIcon: widget.type == LoginType.password ? 
+                            IconButton(
+                              icon: showPassword ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              }
+                            ) :
+                            null,
+      ),
+    obscureText: widget.type == LoginType.password ? !showPassword : false,
+    );
+  }
+
+}
