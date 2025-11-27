@@ -21,20 +21,24 @@ class _MoneyFieldState extends State<MoneyField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextField(
       controller: widget.controller,
       autocorrect: false,
       textCapitalization: TextCapitalization.none,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        fillColor: Colors.grey[200],
+        fillColor: theme.inputDecorationTheme.fillColor,
         filled: true,
         labelText: widget.label,
+        labelStyle: theme.inputDecorationTheme.labelStyle,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: theme.dividerColor)
         ),
         suffixText: "VND"
       ),
+      style: theme.textTheme.bodyMedium
     );
   }
 

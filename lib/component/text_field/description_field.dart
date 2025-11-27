@@ -31,6 +31,9 @@ class _DescriptionFieldState extends State<DescriptionField> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+
     return TextField(
       controller: widget.controller,
       autocorrect: false,
@@ -40,13 +43,16 @@ class _DescriptionFieldState extends State<DescriptionField> {
       maxLines: 3,
       readOnly: !widget.isEditable,
       decoration: InputDecoration(
-        fillColor: Colors.grey[200],
+        fillColor: theme.inputDecorationTheme.fillColor,
         filled: true,
         labelText: widget.label,
+        labelStyle: theme.inputDecorationTheme.labelStyle,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: theme.dividerColor)
         ),
       ),
+      style: theme.textTheme.bodyMedium,
     );
   }
 

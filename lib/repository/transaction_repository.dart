@@ -1,4 +1,4 @@
-import 'package:hello_world/model/transaction_model.dart';
+import 'package:hello_world/service/sqlite/model/transaction_model.dart';
 import 'package:hello_world/service/sqlite/sqlite_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

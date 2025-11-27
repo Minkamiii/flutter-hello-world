@@ -13,3 +13,13 @@ enum TransactionType{
   gain,
   withdraw
 }
+
+enum LocaleType{
+  en,
+  vi
+}
+
+enum AppThemeType{
+  light,
+  dark
+}

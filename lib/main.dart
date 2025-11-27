@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hello_world/service/sqlite/sqlite_service.dart';
-import 'package:hello_world/ui/add_transaction.dart';
-import 'package:hello_world/ui/forgot_password_page.dart';
-import 'package:hello_world/ui/home_page.dart';
-import 'package:hello_world/ui/login_page.dart';
-import 'package:hello_world/ui/register_page.dart';
+import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/ui/theme/app_theme.dart';
+import 'package:hello_world/notifier/locale_provider.dart';
+import 'package:hello_world/ui/pages/add_transaction/add_transaction.dart';
+import 'package:hello_world/ui/pages/change_password/forgot_password_page.dart';
+import 'package:hello_world/ui/pages/home/home_page.dart';
+import 'package:hello_world/ui/pages/login/login_page.dart';
+import 'package:hello_world/ui/pages/register/register_page.dart';
+import 'package:hello_world/notifier/theme_provider.dart';
+import 'package:provider/provider.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart'
 
 void main() async {
-  runApp(App());
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final provider = LocaleProvider();
+  await provider.loadLocale();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: provider),
+        ChangeNotifierProvider(create: (_) => ThemeProvider())
+      ],
+      child: App(),
+    )
+  );
 }
 
 class App extends StatelessWidget {
   App({super.key});
-
-  final db = SqliteService.instance;
 
   final GoRouter _router = GoRouter(
     initialLocation: "/login",
@@ -45,7 +62,22 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localeProvider = context.watch<LocaleProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp.router(
       routerConfig: _router,
+      locale: localeProvider.locale,
+      supportedLocales: const [Locale('en'), Locale('vi')],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeProvider.themeMode,
     );
-  }}
+  }
+}

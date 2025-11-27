@@ -1,4 +1,4 @@
-import 'package:hello_world/model/user_model.dart';
+import 'package:hello_world/service/sqlite/model/user_model.dart';
 import 'package:hello_world/service/sqlite/sqlite_service.dart';
 
 class AuthRepository {

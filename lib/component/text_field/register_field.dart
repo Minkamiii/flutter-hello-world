@@ -26,17 +26,20 @@ class _RegisterFieldState extends State<RegisterField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextField(
       controller: widget.controller,
       keyboardType: widget.type == RegisterType.email ? TextInputType.emailAddress : TextInputType.text,
       autocorrect: false,
       textCapitalization: TextCapitalization.none,
       decoration: InputDecoration(
-        fillColor: Colors.grey[200],
+        fillColor: theme.inputDecorationTheme.fillColor,
         filled: true,
         labelText: widget.label,
+        labelStyle: theme.inputDecorationTheme.labelStyle,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: theme.dividerColor)
         ),
         prefixIcon: Icon(widget.icon),
         suffixIcon: widget.type == RegisterType.password ? 
@@ -50,6 +53,7 @@ class _RegisterFieldState extends State<RegisterField> {
                             ) :
                             null,
       ),
+      style: theme.textTheme.bodyMedium,
       obscureText: widget.type == RegisterType.password ? !showPassword : false,
     );
   }

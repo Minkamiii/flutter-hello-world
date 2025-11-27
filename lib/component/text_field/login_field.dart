@@ -26,16 +26,21 @@ class _LoginFieldState extends State<LoginField> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+
     return TextField(
       controller: widget.controller,
       autocorrect: false,
       textCapitalization: TextCapitalization.none,
       decoration: InputDecoration(
-        fillColor: Colors.grey[200],
+        fillColor: theme.inputDecorationTheme.fillColor,
         filled: true,
         labelText: widget.label,
+        labelStyle: theme.inputDecorationTheme.labelStyle,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: theme.dividerColor)
         ),
         prefixIcon: Icon(widget.icon),
         suffixIcon: widget.type == LoginType.password ? 
@@ -49,7 +54,8 @@ class _LoginFieldState extends State<LoginField> {
                             ) :
                             null,
       ),
-    obscureText: widget.type == LoginType.password ? !showPassword : false,
+      style: theme.textTheme.bodyMedium,
+      obscureText: widget.type == LoginType.password ? !showPassword : false,
     );
   }
 
