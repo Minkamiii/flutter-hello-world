@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/main/base_page.dart';
 import 'package:hello_world/ui/pages/profile/state/profile_bloc.dart';
 import 'package:hello_world/component/button/login_button.dart';
@@ -106,7 +107,7 @@ class ProfileViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage<ProfileBloc, ProfileState>(
-      onCreate: (_) => ProfileBloc(AuthRepository(), AppLocalizations.of(context)!)..add(LoadProfile()),
+      onCreate: (_) => ProfileBloc(getIt<AuthRepository>(), AppLocalizations.of(context)!)..add(LoadProfile()),
       listener: profileListener,
       builder: profileBuilder,
       floatingActionButton: (context, state) =>

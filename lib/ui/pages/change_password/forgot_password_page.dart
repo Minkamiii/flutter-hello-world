@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/change_password/state/forgot_password_bloc.dart';
 import 'package:hello_world/component/button/login_button.dart';
 import 'package:hello_world/component/text_field/login_field.dart';
@@ -109,7 +110,7 @@ class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      onCreate: (_) => ForgotPasswordBloc(AuthRepository(), AppLocalizations.of(context)!),
+      onCreate: (_) => ForgotPasswordBloc(getIt<AuthRepository>(), AppLocalizations.of(context)!),
       listener: forgotPasswordListener,
       builder: forgotPasswordBuilder,
     );

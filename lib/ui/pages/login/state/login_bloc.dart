@@ -1,5 +1,6 @@
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:hello_world/l10n/app_localizations.dart";
+import "package:hello_world/service/get_it/get_it.dart";
 import "package:hello_world/ui/pages/login/state/login_event.dart";
 import "package:hello_world/service/sqlite/model/user_model.dart";
 import "package:hello_world/repository/auth_repository.dart";
@@ -17,8 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       User? loginSuccess = await authRepository.login(event.username, event.password);
       if(loginSuccess != null){
 
-        final localStorage = await SharedPreferences.getInstance();
-        await localStorage.setInt('userid', loginSuccess.id!);
+        getIt<SharedPreferences>().setInt('userid', loginSuccess.id!);
 
         emit(LoginSucess());
       }

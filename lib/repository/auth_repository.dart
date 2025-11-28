@@ -1,11 +1,11 @@
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/service/sqlite/model/user_model.dart';
-import 'package:hello_world/service/sqlite/sqlite_service.dart';
+import 'package:sqflite/sqflite.dart';
 
 class AuthRepository {
-  final dbService = SqliteService.instance;
+  final db = getIt<Database>();
 
   Future<User?> login(String username, String password) async {
-    final db = await dbService.database;
     final maps = await db.query(
       'users',
       where: 'username = ? and password = ?',
@@ -20,7 +20,6 @@ class AuthRepository {
   }
 
   Future<int> register(String username, String password, String email) async {
-    final db = await dbService.database;
     return await db.insert(
       'users',
       User(
@@ -32,7 +31,6 @@ class AuthRepository {
   }
 
   Future<int> update(User user) async{
-    final db = await dbService.database;
     return db.update(
       'users', 
       user.toUpdateProfileJson(),
@@ -42,7 +40,6 @@ class AuthRepository {
   }
 
   Future<User?> get(int id) async {
-    final db = await dbService.database;
     final maps = await db.query(
       'users',
       where: 'id = ?',
@@ -54,7 +51,6 @@ class AuthRepository {
   }
 
   Future<bool> userExists(String usernameOrEmail) async {
-    final db = await dbService.database;
     final maps = await db.query(
       'users',
       where: 'username = ? or email = ?',
@@ -66,7 +62,6 @@ class AuthRepository {
   }
 
   Future<int> delete(int id) async {
-    final db = await dbService.database;
     return await db.delete(
       'users',
       where: 'id = ?',
@@ -75,7 +70,6 @@ class AuthRepository {
   }
 
   Future<int> changePassword(String usernameOrEmail, String password) async {
-    final db = await dbService.database;
     final maps = await db.update(
       'users',
       {'password': password},

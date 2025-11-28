@@ -1,19 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world/enumerator/type.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/settings/cubit/setting_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingCubit extends Cubit<SettingState> {
 
   final AppLocalizations loc;
+  final localStorage = getIt<SharedPreferences>();
 
   SettingCubit(this.loc) :  super(SettingState.initial()) {
     load();
   }
 
   Future<void> load() async {
-    final localStorage = await SharedPreferences.getInstance();
     final locale =  localStorage.getString('locale');
     final theme = localStorage.getString('theme');
     LocaleType lang = LocaleType.en;
@@ -65,7 +66,6 @@ class SettingCubit extends Cubit<SettingState> {
   }
 
   Future<void> confirmChanges() async {
-    final localStorage = await SharedPreferences.getInstance();
     localStorage.setString('locale', state.selectedLocale.name);
     localStorage.setString('theme', state.currentTheme.name);
 
@@ -79,7 +79,6 @@ class SettingCubit extends Cubit<SettingState> {
   }
 
   void logout() async {
-    final localStorage = await SharedPreferences.getInstance();
     localStorage.remove('userid');
 
     emit(state.copyWith(

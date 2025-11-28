@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/theme/app_theme.dart';
 import 'package:hello_world/notifier/locale_provider.dart';
 import 'package:hello_world/ui/pages/add_transaction/add_transaction.dart';
@@ -14,8 +15,11 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart'
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
+  
+  //setup getIt
+  await setupDI();
+  await getIt.allReady();
 
   final provider = LocaleProvider();
   await provider.loadLocale();

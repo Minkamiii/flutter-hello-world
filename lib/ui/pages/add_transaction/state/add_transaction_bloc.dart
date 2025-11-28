@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world/enumerator/type.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/add_transaction/state/add_transaction_event.dart';
 import 'package:hello_world/service/sqlite/model/transaction_model.dart';
 import 'package:hello_world/repository/transaction_repository.dart';
@@ -15,8 +16,7 @@ class AddTransactionBloc extends Bloc<AddTransactionEvent, AddTransactionState> 
   AddTransactionBloc(this.repository, this.loc) : super(AddTransactionInitial()) {
     on<AddTransactionButtonClicked>((event, emit) async {
       emit(AddTransactionLoading());
-      final localStorage = await SharedPreferences.getInstance();
-      int userId = localStorage.getInt('userid')!;
+      int userId = getIt<SharedPreferences>().getInt('userid')!;
 
       final res = await repository.createTransaction(
         Transaction.newTransaction(

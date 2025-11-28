@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/extension/transaction_type_localization.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/add_transaction/state/add_transaction_bloc.dart';
 import 'package:hello_world/component/button/login_button.dart';
 import 'package:hello_world/component/text_field/description_field.dart';
@@ -110,7 +111,7 @@ class AddTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      onCreate: (_) => AddTransactionBloc(TransactionRepository(), AppLocalizations.of(context)!),
+      onCreate: (_) => AddTransactionBloc(getIt<TransactionRepository>(), AppLocalizations.of(context)!),
       listener: addTransactionListener,
       builder: addTransactionBuilder,
     );

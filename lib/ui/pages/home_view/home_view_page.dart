@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
 import 'package:hello_world/ui/pages/home_view/state/transaction_bloc.dart';
 import 'package:hello_world/ui/pages/home_view/state/transaction_event.dart';
 import 'package:hello_world/repository/transaction_repository.dart';
@@ -61,7 +62,6 @@ class HomeViewPage extends StatelessWidget {
                             : null,
                         trailing: Text(
                           DateFormat(AppLocalizations.of(context)!.day_format).format(t.time!),
-                          style: TextStyle(color: Colors.grey[700]),
                         ),
                       ),
                     )
@@ -78,7 +78,7 @@ class HomeViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage<TransactionBloc, TransactionState>(
-      onCreate: (_) => TransactionBloc(TransactionRepository(), AppLocalizations.of(context)!)..add(LoadTransactions()),
+      onCreate: (_) => TransactionBloc(getIt<TransactionRepository>(), AppLocalizations.of(context)!)..add(LoadTransactions()),
       listener: transactionListener,
       builder: transactionBuilder,
       floatingActionButton: (context, state) => FloatingActionButton(

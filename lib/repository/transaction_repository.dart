@@ -1,13 +1,13 @@
-import 'package:hello_world/service/sqlite/model/transaction_model.dart';
-import 'package:hello_world/service/sqlite/sqlite_service.dart';
+import 'package:hello_world/service/get_it/get_it.dart';
+import 'package:hello_world/service/sqlite/model/transaction_model.dart' as model;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TransactionRepository {
-  final dbService = SqliteService.instance;
+  final localStorage = getIt<SharedPreferences>();
+  final db = getIt<Database>();
 
   Future<int> totalAmount() async {
-    final db = await dbService.database;
-    final localStorage = await SharedPreferences.getInstance();
     int userId = localStorage.getInt('userid')!;
     final res = await db.rawQuery('''
       select sum(amount) as total
@@ -20,9 +20,7 @@ class TransactionRepository {
     return total ?? 0;
   }
 
-  Future<List<Transaction>> getAllTransactions() async {
-    final db = await dbService.database;
-    final localStorage = await SharedPreferences.getInstance();
+  Future<List<model.Transaction>> getAllTransactions() async {
     int userId = localStorage.getInt('userid')!;
     final res = await db.query(
       'transactions',
@@ -31,11 +29,10 @@ class TransactionRepository {
       orderBy: 'time desc'
     );
 
-    return res.map((e) => Transaction.fromMap(e)).toList();
+    return res.map((e) => model.Transaction.fromMap(e)).toList();
   }
 
-  Future<int> createTransaction(Transaction t) async {
-    final db = await dbService.database;
+  Future<int> createTransaction(model.Transaction t) async {
     final res = await db.insert(
       'transactions',
       t.toNewJson()
