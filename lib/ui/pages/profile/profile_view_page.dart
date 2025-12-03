@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world/component/adaptive_layout/base_adaptive_layout.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
 import 'package:hello_world/service/get_it/get_it.dart';
@@ -10,9 +11,10 @@ import 'package:hello_world/component/text_field/description_field.dart';
 import 'package:hello_world/component/text_field/profile_field.dart';
 import 'package:hello_world/ui/pages/profile/state/profile_event.dart';
 import 'package:hello_world/repository/auth_repository.dart';
+import 'package:hello_world/ui/pages/profile/state/profile_scope.dart';
 import 'package:hello_world/ui/pages/profile/state/profile_state.dart';
 
-class ProfileViewPage extends StatelessWidget {
+class ProfileViewPage extends StatelessWidget with BaseAdaptiveLayout {
 
   final TextEditingController email = TextEditingController();
   final TextEditingController role = TextEditingController();
@@ -38,11 +40,17 @@ class ProfileViewPage extends StatelessWidget {
   }
 
   Widget profileBuilder(BuildContext context, ProfileState state){
-    if(state is ProfileLoading){
-      return CircularProgressIndicator();
-    }
-    if(state is ProfileLoaded){
-      return Padding(
+    return switch(state){
+      var s when s is ProfileLoading => Center(child: CircularProgressIndicator()),
+      var s when s is ProfileLoaded => ProfileScope(state: state, child: adaptiveLayout(context)),
+      _ => Center(),
+    };
+  }
+
+  @override
+  Widget buildPortraitMobile(BuildContext context, Size size) {
+    final state = ProfileScope.of(context).state as ProfileLoaded;
+    return Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
@@ -99,9 +107,6 @@ class ProfileViewPage extends StatelessWidget {
           ],
         ),
       );
-    }
-
-    return Center();
   }
   
   @override

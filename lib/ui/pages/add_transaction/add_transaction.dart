@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world/component/adaptive_layout/base_adaptive_layout.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/extension/transaction_type_localization.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
@@ -12,10 +13,11 @@ import 'package:hello_world/component/text_field/money_field.dart';
 import 'package:hello_world/enumerator/type.dart';
 import 'package:hello_world/ui/pages/add_transaction/state/add_transaction_event.dart';
 import 'package:hello_world/repository/transaction_repository.dart';
+import 'package:hello_world/ui/pages/add_transaction/state/add_transaction_scope.dart';
 import 'package:hello_world/ui/pages/add_transaction/state/add_transaction_state.dart';
 import 'package:hello_world/ui/pages/main/base_page.dart';
 
-class AddTransaction extends StatelessWidget {
+class AddTransaction extends StatelessWidget with BaseAdaptiveLayout {
 
   final TextEditingController amount = TextEditingController();
   final TextEditingController description = TextEditingController();
@@ -42,9 +44,18 @@ class AddTransaction extends StatelessWidget {
   }
 
   Widget addTransactionBuilder(BuildContext context, AddTransactionState state){
-    if(state is AddTransactionLoading){
-      return CircularProgressIndicator();
-    }
+    return switch(state){
+      var s when s is AddTransactionLoading => Center(child: CircularProgressIndicator()),
+      _ => AddTransactionScope(
+        state: state, 
+        child: adaptiveLayout(context)
+      )
+    };
+  }
+
+  @override
+  Widget buildPortraitMobile(BuildContext context, Size size) {
+    final state = AddTransactionScope.of(context).state;
     final selectedType = (state is AddTransactionInitial) ? state.selectedType : TransactionType.gain;
     final loc = AppLocalizations.of(context)!;
     return Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world/component/adaptive_layout/base_adaptive_layout.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
 import 'package:hello_world/service/get_it/get_it.dart';
@@ -13,7 +14,7 @@ import 'package:hello_world/ui/pages/register/state/register_event.dart';
 import 'package:hello_world/repository/auth_repository.dart';
 import 'package:hello_world/ui/pages/register/state/register_state.dart';
 
-class Register extends StatelessWidget{
+class Register extends StatelessWidget with BaseAdaptiveLayout{
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -41,6 +42,14 @@ class Register extends StatelessWidget{
   }
 
   Widget registerBuilder(BuildContext context, RegisterState state){
+    return switch(state){
+      var s when s is RegisterLoading => Center(child: CircularProgressIndicator()),
+      _ => adaptiveLayout(context)
+    };
+  }
+
+  @override
+  Widget buildLandscapeMobile(BuildContext context, Size size) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(

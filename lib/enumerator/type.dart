@@ -23,3 +23,9 @@ enum AppThemeType{
   light,
   dark
 }
+
+enum DeviceType{
+  mobile,
+  tablet,
+  desktop
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world/component/adaptive_layout/base_adaptive_layout.dart';
 import 'package:hello_world/component/button/login_button.dart';
 import 'package:hello_world/enumerator/type.dart';
 import 'package:hello_world/extension/app_theme_type_localization.dart';
@@ -10,9 +11,10 @@ import 'package:hello_world/notifier/locale_provider.dart';
 import 'package:hello_world/notifier/theme_provider.dart';
 import 'package:hello_world/ui/pages/main/base_page.dart';
 import 'package:hello_world/ui/pages/settings/cubit/setting_cubit.dart';
+import 'package:hello_world/ui/pages/settings/cubit/setting_scope.dart';
 import 'package:hello_world/ui/pages/settings/cubit/setting_state.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatelessWidget with BaseAdaptiveLayout {
   const SettingPage({super.key});
 
   void settingListener (BuildContext context, SettingState state){
@@ -26,7 +28,12 @@ class SettingPage extends StatelessWidget {
   }
 
   Widget settingBuilder (BuildContext context, SettingState state){
+    return SettingScope(state: state, child: adaptiveLayout(context));
+  }
 
+  @override
+  Widget buildPortraitMobile(BuildContext context, Size size) {
+    final state = SettingScope.of(context).state;
     final loc = AppLocalizations.of(context)!;
 
     return Center(

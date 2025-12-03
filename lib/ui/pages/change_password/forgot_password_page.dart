@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world/component/adaptive_layout/base_adaptive_layout.dart';
 import 'package:hello_world/component/notification/snack_bar_notification.dart';
 import 'package:hello_world/l10n/app_localizations.dart';
 import 'package:hello_world/service/get_it/get_it.dart';
@@ -10,10 +11,11 @@ import 'package:hello_world/component/text_field/login_field.dart';
 import 'package:hello_world/enumerator/type.dart';
 import 'package:hello_world/ui/pages/change_password/state/forgot_password_event.dart';
 import 'package:hello_world/repository/auth_repository.dart';
+import 'package:hello_world/ui/pages/change_password/state/forgot_password_scope.dart';
 import 'package:hello_world/ui/pages/change_password/state/forgot_password_state.dart';
 import 'package:hello_world/ui/pages/main/base_page.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends StatelessWidget with BaseAdaptiveLayout {
 
   final TextEditingController usernameOrEmail = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -40,9 +42,18 @@ class ForgotPasswordPage extends StatelessWidget {
   }
 
   Widget forgotPasswordBuilder(BuildContext context, ForgotPasswordState state){
-    if(state is ForgotPasswordLoading){
-      return CircularProgressIndicator();
-    }
+    return switch(state){
+      var s when s is ForgotPasswordLoading => Center(child: CircularProgressIndicator()),
+      _ => ForgotPasswordScope(
+        state: state, 
+        child: adaptiveLayout(context)
+      )
+    };
+  }
+
+  @override
+  Widget buildPortraitMobile(BuildContext context, Size size) {
+    final state = ForgotPasswordScope.of(context).state;
     final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16),
